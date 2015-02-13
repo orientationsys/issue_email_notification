@@ -39,11 +39,27 @@ Change your message body in the given $subjectPara variables.
 $subjectPara1 means 'first paragraph in message body', $subjectPara2 means'first paragraph in message body',
 if you don't want more than 1 para, just put NULL in unused $subjectPara variables.
 */
-$subjectPara1 = 'issue('.$objPayload->issue->id.'): '.$objPayload->issue->title.' has just been '.$objPayload->action.'.';
-$subjectPara3 = NULL;
-$subjectPara4 = NULL;
-$subjectPara5 = NULL;
 
+//If that is a comment created for an issue
+if($objPayload->action === 'created'){
+	
+	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has been commented as following:';
+	$subjectPara2 = NULL;
+	$subjectPara3 = 'Issue comment: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been '.$objPayload->action.' by '. $objPayload->sender->login .'.';
+	$subjectPara4 = '<strong>"'.$objPayload->comment->body.'"</strong>';
+	$subjectPara5 = $objPayload->comment->updated_at;
+	
+}
+//If that is an issue activity
+else{
+	
+	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has been changed as following:';
+	$subjectPara2 = 'Issue: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been '.$objPayload->action.' by '. $objPayload->sender->login .'.';
+	//$subjectPara3 = '<span style="color:'.$objPayload->issue->labels->color.'">'.$objPayload->issue->labels->name.'</span>';
+	$subjectPara3 = $objPayload->issue->labels['name'];
+	$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
+	$subjectPara5 = $objPayload->issue->updated_at;
+}
 $message = '<!DOCTYPE HTML>'.
 '<head>'.
 '<meta http-equiv="content-type" content="text/html">'.
