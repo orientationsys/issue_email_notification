@@ -53,10 +53,12 @@ if($objPayload->action === 'created'){
 //If that is an issue activity
 else{
 	
-	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has been changed as following:';
-	$subjectPara2 = 'Issue: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been '.$objPayload->action.' by '. $objPayload->sender->login .'.';
-	//$subjectPara3 = '<span style="color:'.$objPayload->issue->labels->color.'">'.$objPayload->issue->labels->name.'</span>';
-	$subjectPara3 = $objPayload->issue->labels['name'];
+	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has activity as following:';
+	$subjectPara2 = 'Issue: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been <strong>'.$objPayload->action.'</strong> by '. $objPayload->sender->login .'.';
+	//$subjectPara3 = '<span style="color:'.$objPayload->label->color.'">'.$objPayload->label->name.'</span>';
+	foreach($objPayload->issue->labels as $label){
+		$subjectPara3 .='<span style="background-color:'.$label->color.'; padding: 2px 4px; font-size: 12px; font-weight:bold; border-radius:2px; box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.12) inset;">'.$label->name.'</span> ';
+	}	
 	$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
 	$subjectPara5 = $objPayload->issue->updated_at;
 }
@@ -86,7 +88,7 @@ $message = '<!DOCTYPE HTML>'.
 /*EMAIL TEMPLATE ENDS*/
 
 $subject = 'github issue notification';  //change subject of email
-$from    = 'notification@github.com';                           // give from email address
+$from    = 'github_notification@orientationsys.com';    // give from email address
 
 // mandatory headers for email message, change if you need something different in your setting.
 $headers  = "From: " . $from . "\r\n";
