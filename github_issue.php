@@ -57,7 +57,7 @@ if(!$mail->send()) {
  
  $emailAddresses = array(
 	'tttccc@gmail.com',
-    //'michael@orientationsys.com'
+    'lz@orientationsys.com'
 );
 
 
@@ -93,7 +93,22 @@ if($objPayload->action === 'created'){
 	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has been commented as following:';
 	$subjectPara2 = NULL;
 	$subjectPara3 = 'Issue comment: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been '.$objPayload->action.' by '. $objPayload->sender->login .'.';
-	$subjectPara4 = '<strong>"'.$objPayload->comment->body.'"</strong>';
+	
+	//Use regular expression to check if issue body contains uploaded images
+	$pattern = '/(!)(\[)((?:[a-z][a-z0-9_]*))(\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
+	preg_match_all($pattern,$objPayload->comment->body,$match);
+	
+	if(count($match[0]) != 0){
+		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is(() (https) (:) (/) (/) (cloud.githubusercontent.com) (/) (assets) (/) ())';
+		foreach($match[0] as $image){
+			$pattern_url='/((?:[a-z][a-z]+))(:)(\/)((?:\/[\w\.\-]+)+)/is';
+			preg_match_all($pattern_url,$image,$image_url);
+			$subjectPara4 = '<strong>"'.str_replace($image, '<br><img src="'.$image_url[0][0].'"/><br>',$objPayload->comment->body).'"</strong>';	
+		}
+	}else{
+		$subjectPara4 = '<strong>"'.$objPayload->comment->body.'"</strong>';		
+	}
+	
 	$subjectPara5 = $objPayload->comment->updated_at;
 	
 }
@@ -107,7 +122,21 @@ elseif($objPayload->action !='labeled'){
 	foreach($objPayload->issue->labels as $label){
 		$subjectPara3 .='<span style="background-color:'.$label->color.'; padding: 2px 4px; font-size: 12px; font-weight:bold; border-radius:2px; box-shadow: 0px -1px 0px rgba(0, 0, 0, 0.12) inset;">'.$label->name.'</span> ';
 	}	
-	$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
+	//$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
+	//Use regular expression to check if issue body contains uploaded images
+	$pattern = '/(!)(\[)((?:[a-z][a-z0-9_]*))(\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
+	preg_match_all($pattern,$objPayload->issue->body,$match);
+	
+	if(count($match[0]) != 0){
+		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is(() (https) (:) (/) (/) (cloud.githubusercontent.com) (/) (assets) (/) ())';
+		foreach($match[0] as $image){
+			$pattern_url='/((?:[a-z][a-z]+))(:)(\/)((?:\/[\w\.\-]+)+)/is';
+			preg_match_all($pattern_url,$image,$image_url);
+			$subjectPara4 = '<strong>"'.str_replace($image, '<br><img src="'.$image_url[0][0].'"/><br>',$objPayload->issue->body).'"</strong>';	
+		}
+	}else{
+		$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';		
+	}
 	$subjectPara5 = $objPayload->issue->updated_at;
 }else{
 	exit(0);
@@ -217,6 +246,7 @@ $current .= date('Y-m-d H:i:s ') . $messages . "\n";
 // Write the contents back to the file
 file_put_contents($file, $current);
 */
+
 
 
 
