@@ -99,7 +99,7 @@ if($objPayload->action === 'created'){
 }
 //If that is an issue activity
 //Not notify labeled action as it's seems useless
-elseif($objPayload->action !=='labeled ){
+elseif($objPayload->action !='labeled'){
 	
 	$subjectPara1 = 'git repository: <a href="'.$objPayload->repository->html_url.'">'.$objPayload->repository->name.'</a> issue has activity as following:';
 	$subjectPara2 = 'Issue: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been <strong>'.$objPayload->action.'</strong> by '. $objPayload->sender->login .'.';
