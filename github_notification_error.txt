@@ -1,0 +1,2 @@
+2015-02-15 11:33:06 Message could not be sent. Mailer Error:SMTP connect() failed.
+2015-02-15 11:33:07 Message could not be sent. Mailer Error:SMTP connect() failed.

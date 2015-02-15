@@ -8,14 +8,61 @@
  *  Use it as a githhub webhook script to send issue activities notification email
  *  to specific email addresses
   */
+
+require 'PHPMailer/PHPMailerAutoload.php';
+
+
+ /* PHPMailer installation sample here:
+
+require './PHPMailerAutoload.php';
+$mail = new PHPMailer;
+
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+$mail->isSMTP();                                      // Set mailer to use SMTP
+$mail->Host = 'smtp1.example.com;smtp2.example.com';  // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                               // Enable SMTP authentication
+$mail->Username = 'user@example.com';                 // SMTP username
+$mail->Password = 'secret';                           // SMTP password
+$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 587;                                    // TCP port to connect to
+
+$mail->From = 'from@example.com';
+$mail->FromName = 'Mailer';
+$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
+$mail->addAddress('ellen@example.com');               // Name is optional
+$mail->addReplyTo('info@example.com', 'Information');
+$mail->addCC('cc@example.com');
+$mail->addBCC('bcc@example.com');
+
+$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+$mail->isHTML(true);                                  // Set email format to HTML
+
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+if(!$mail->send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message has been sent';
+}
+ */
+ 
+ 
+ 
  
  
  $emailAddresses = array(
 	'tttccc@gmail.com',
     //'michael@orientationsys.com'
 );
- 
- 
+
+
+
+
 try {
 
 	$objPayload = json_decode(file_get_contents('php://input'));
@@ -87,6 +134,58 @@ $message = '<!DOCTYPE HTML>'.
 
 /*EMAIL TEMPLATE ENDS*/
 
+
+
+
+$mail = new PHPMailer;
+
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+$mail->isSMTP();                                      // Set mailer to use SMTP
+$mail->Host = 'smtp.googlemail.com';  // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                               // Enable SMTP authentication
+$mail->Username = 'github_notification@orientationsys.com';                 // SMTP username
+$mail->Password = 'orientationsys7788';                           // SMTP password
+$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 587;                                    // TCP port to connect to
+
+$mail->From = 'github_notification@orientationsys.com';
+$mail->FromName = 'github notification';
+// Send issues content to each email address
+foreach($emailAddresses as $email){
+	$mail->addAddress($email, 'Michael'); 	
+}
+//$mail->addAddress('tttccc@gmail.com', 'Michael');     // Add a recipient
+//$mail->addAddress('ellen@example.com');               // Name is optional
+$mail->addReplyTo('do-not-rely@orientationsys.com', 'auto-send email, do not reply');
+//$mail->addCC('cc@example.com');
+//$mail->addBCC('bcc@example.com');
+
+//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+//$mail->isHTML(true);                                  // Set email format to HTML
+
+$mail->Subject = 'github issue notification';
+$mail->Body    = $message;
+$mail->AltBody = 'github issue notification';
+
+
+
+if(!$mail->send()) {
+	$file = 'github_notification_error.txt';
+	$current = file_get_contents($file);
+	$current .= date('Y-m-d H:i:s ') . 'Message could not be sent. Mailer Error:'.$mail->ErrorInfo . "\n";
+	file_put_contents($file, $current);
+    
+} else {
+    echo 'Message has been sent';
+};
+
+
+
+
+/*
+
 $subject = 'github issue notification';  //change subject of email
 $from    = 'github_notification@orientationsys.com';    // give from email address
 
@@ -97,10 +196,7 @@ $headers .= "Reply-To: ". $from . "\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n"; 
 
-// Send issues content to each email address
-foreach($emailAddresses as $email){
-	mail($email, $subject, $message, $headers);
-}
+
 
 
 /* Write into a file to testing pupose 
