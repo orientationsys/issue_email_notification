@@ -77,9 +77,9 @@ try {
 
 /*EMAIL TEMPLATE BEGINS*/
 
-$imgSrc   = 'https://www.google.com/images/srpr/logo11w.png'; // Change image src to your site specific settings
-$imgDesc  = 'google search logo'; // Change Alt tag/image Description to your site specific settings
-$imgTitle = 'Google Logo'; // Change Alt Title tag/image title to your site specific settings
+$imgSrc   = 'http://www.orientationsys.com/wp-content/themes/orientationsys/images/logo.png'; // Change image src to your site specific settings
+$imgDesc  = 'Oientationsys logo'; // Change Alt tag/image Description to your site specific settings
+$imgTitle = 'Orientationsys'; // Change Alt Title tag/image title to your site specific settings
 
 /*
 Change your message body in the given $subjectPara variables. 
@@ -109,16 +109,18 @@ elseif($objPayload->action !='labeled'){
 	}	
 	$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
 	$subjectPara5 = $objPayload->issue->updated_at;
+}else{
+	exit(0);
 }
-$message = '<!DOCTYPE HTML>'.
+$message = '<html>'.
 '<head>'.
-'<meta http-equiv="content-type" content="text/html">'.
+'<meta http-equiv="content-type" content="text/html; charset=utf-8">'.
 '<title>Email notification</title>'.
 '</head>'.
 '<body>'.
-//'<div id="header" style="width: 80%;height: 60px;margin: 0 auto;padding: 10px;color: #fff;text-align: center;background-color: #E0E0E0;font-family: Open Sans,Arial,sans-serif;">'.
-//   '<img height="50" width="220" style="border-width:0" src="'.$imgSrc.'" alt="'.$imgDesc.'" title="'.$imgTitle.'">'.
-//'</div>'.
+'<div id="header" style="width: 80%;height: 60px;margin: 0 auto;padding: 10px;color: #fff;text-align: center;background-color: #E0E0E0;font-family: Open Sans,Arial,sans-serif;">'.
+   '<img height="50" width="220" style="border-width:0" src="'.$imgSrc.'" alt="'.$imgDesc.'" title="'.$imgTitle.'">'.
+'</div>'.
 
 '<div id="outer" style="width: 80%;margin: 0 auto;margin-top: 10px;">'. 
    '<div id="inner" style="width: 78%;margin: 0 auto;background-color: #fff;font-family: Open Sans,Arial,sans-serif;font-size: 13px;font-weight: normal;line-height: 1.4em;color: #444;margin-top: 10px;">'.
@@ -131,7 +133,7 @@ $message = '<!DOCTYPE HTML>'.
 '</div>'.
 
 
-'</body>';
+'</body></html>';
 
 /*EMAIL TEMPLATE ENDS*/
 
@@ -164,7 +166,8 @@ $mail->addReplyTo('do-not-rely@orientationsys.com', 'auto-send email, do not rep
 
 //$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-//$mail->isHTML(true);                                  // Set email format to HTML
+$mail->isHTML(true);  
+$mail->CharSet="UTF-8";                                // Set email format to HTML
 
 if($objPayload->action === 'created'){
 	$mail->Subject = 'github issue comment notification';
