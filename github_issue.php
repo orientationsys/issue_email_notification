@@ -118,13 +118,14 @@ $message = '<html>'.
 '<title>Email notification</title>'.
 '</head>'.
 '<body>'.
-'<div id="header" style="width: 80%;height: 60px;margin: 0 auto;padding: 10px;color: #fff;text-align: center;background-color: #E0E0E0;font-family: Open Sans,Arial,sans-serif;">'.
-   '<img height="50" width="220" style="border-width:0" src="'.$imgSrc.'" alt="'.$imgDesc.'" title="'.$imgTitle.'">'.
+'<div id="header" style="width: 80%;height: 20px;margin: 0 auto;padding: 10px; text-align: center; background-color: #E0E0E0;font-family: Open Sans,Arial,sans-serif;">'.
+   //'<img height="50" width="220" style="border-width:0" src="'.$imgSrc.'" alt="'.$imgDesc.'" title="'.$imgTitle.'">'.
+   ''.$subjectPara1.''.
 '</div>'.
 
 '<div id="outer" style="width: 80%;margin: 0 auto;margin-top: 10px;">'. 
    '<div id="inner" style="width: 78%;margin: 0 auto;background-color: #fff;font-family: Open Sans,Arial,sans-serif;font-size: 13px;font-weight: normal;line-height: 1.4em;color: #444;margin-top: 10px;">'.
-       '<p>'.$subjectPara1.'</p>'.
+       
        '<p>'.$subjectPara2.'</p>'.
        '<p>'.$subjectPara3.'</p>'.
        '<p>'.$subjectPara4.'</p>'.
