@@ -166,7 +166,11 @@ $mail->addReplyTo('do-not-rely@orientationsys.com', 'auto-send email, do not rep
 //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 //$mail->isHTML(true);                                  // Set email format to HTML
 
-$mail->Subject = 'github issue notification';
+if($objPayload->action === 'created'){
+	$mail->Subject = 'github issue comment notification';
+}else{
+	$mail->Subject = 'github issue notification';
+}
 $mail->Body    = $message;
 $mail->AltBody = 'github issue notification';
 
