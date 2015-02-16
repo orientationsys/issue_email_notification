@@ -12,6 +12,7 @@
 require 'PHPMailer/PHPMailerAutoload.php';
 
 
+
  /* PHPMailer installation sample here:
 
 require './PHPMailerAutoload.php';
@@ -57,7 +58,7 @@ if(!$mail->send()) {
  
  $emailAddresses = array(
 	'tttccc@gmail.com',
-    //'lz@orientationsys.com'
+    'lz@orientationsys.com'
 );
 
 
@@ -109,7 +110,7 @@ if($objPayload->action === 'created'){
 		$subjectPara4 = '<span style="color:#244F79">"'.$objPayload->comment->body.'"</strong>';		
 	}
 	
-	$subjectPara5 = $objPayload->comment->updated_at;
+	$subjectPara5 = date('Y-m-d H:i:s',strtotime($objPayload->comment->updated_at));
 	
 }
 //If that is an issue activity
@@ -137,7 +138,8 @@ elseif($objPayload->action !='labeled'){
 	}else{
 		$subjectPara4 = '<span style="color:#244F79">"'.$objPayload->issue->body.'"</strong>';		
 	}
-	$subjectPara5 = $objPayload->issue->updated_at;
+	$subjectPara5 = date('Y-m-d H:i:s',strtotime($objPayload->issue->updated_at));
+
 }else{
 	exit(0);
 }
@@ -283,7 +285,7 @@ $message = <<< EOF
                                        <tbody>
                                           <!-- Title -->
                                           <tr>
-                                             <td style="font-family: Helvetica, arial, sans-serif; font-size: 30px; color: #333333; text-align:center; line-height: 30px;" st-title="fulltext-title">
+                                             <td style="font-family: Helvetica, arial, sans-serif; font-size: 24px; color: #333333; text-align:center; line-height: 30px;" st-title="fulltext-title">
 											 {$subjectPara1}
                                              </td>
                                           </tr>
