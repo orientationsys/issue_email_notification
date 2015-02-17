@@ -96,11 +96,11 @@ if($objPayload->action === 'created'){
 	$subjectPara3 = 'Issue comment: <a href="'. $objPayload->issue->html_url.'">'.$objPayload->issue->title.'('.$objPayload->issue->id.')</a> has just been '.$objPayload->action.' by '. $objPayload->sender->login .'.';
 	
 	//Use regular expression to check if issue body contains uploaded images
-	$pattern = '/(!)(\[)((?:[a-z][a-z0-9_]*))(\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
+	$pattern = '/(!)(\\[.*?\\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
 	preg_match_all($pattern,$objPayload->comment->body,$match);
 	
 	if(count($match[0]) != 0){
-		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is(() (https) (:) (/) (/) (cloud.githubusercontent.com) (/) (assets) (/) ())';
+		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
 		foreach($match[0] as $image){
 			$pattern_url='/((?:[a-z][a-z]+))(:)(\/)((?:\/[\w\.\-]+)+)/is';
 			preg_match_all($pattern_url,$image,$image_url);
@@ -125,11 +125,11 @@ elseif($objPayload->action !='labeled'){
 	}	
 	//$subjectPara4 = '<strong>"'.$objPayload->issue->body.'"</strong>';
 	//Use regular expression to check if issue body contains uploaded images
-	$pattern = '/(!)(\[)((?:[a-z][a-z0-9_]*))(\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
+	$pattern = '/(!)(\\[.*?\\])(\()((?:[a-z][a-z]+))(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
 	preg_match_all($pattern,$objPayload->issue->body,$match);
 	
 	if(count($match[0]) != 0){
-		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is(() (https) (:) (/) (/) (cloud.githubusercontent.com) (/) (assets) (/) ())';
+		$pattern_url='/(\()(https)(:)(\/)(\/)(cloud\.githubusercontent\.com)(\/)(assets)(\/).*?(\))/is';
 		foreach($match[0] as $image){
 			$pattern_url='/((?:[a-z][a-z]+))(:)(\/)((?:\/[\w\.\-]+)+)/is';
 			preg_match_all($pattern_url,$image,$image_url);
